@@ -6,6 +6,9 @@ import Store from './components/Store';
 import Error404 from './components/Error404';
 import Cart from './components/Cart';
 import {useState} from "react";
+import { Provider } from 'react-redux';
+import {createStore} from 'redux';
+import reducer from './reducers/storeReducer';
 
 const App = () => {
 	const products = [
@@ -32,30 +35,34 @@ const App = () => {
 		}
 	};
 
+    const store = createStore(reducer)
+
 	return (
-		<Container>
-			<Menu>
-				<NavLink to="/">Home</NavLink>
-				<NavLink to="/blog">Blog</NavLink>
-				<NavLink to="/store">Store</NavLink>
-			</Menu>
-			<main>
-				<Routes>
-					<Route path="*" element={<Error404 />} />
-					<Route path="/" element={<Home />} />
-					<Route path="/blog" element={<Blog />} />
-					<Route path="/store" element={
-						<Store 
-							products={products}
-							addToCart={addToCart}
-						/>}	
-					/>
-				</Routes>
-			</main>
-			<aside>
-				<Cart cart={cart} />
-			</aside>
-		</Container>
+		<Provider store={store}>
+			<Container>
+				<Menu>
+					<NavLink to="/">Home</NavLink>
+					<NavLink to="/blog">Blog</NavLink>
+					<NavLink to="/store">Store</NavLink>
+				</Menu>
+				<main>
+					<Routes>
+						<Route path="*" element={<Error404 />} />
+						<Route path="/" element={<Home />} />
+						<Route path="/blog" element={<Blog />} />
+						<Route path="/store" element={
+							<Store 
+								products={products}
+								addToCart={addToCart}
+							/>}	
+						/>
+					</Routes>
+				</main>
+				<aside>
+					<Cart cart={cart} />
+				</aside>
+			</Container>
+		</Provider>
 	);
 }
 
